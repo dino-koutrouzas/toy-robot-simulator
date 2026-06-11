@@ -21,6 +21,16 @@ RSpec.describe Simulation do
       simulation.process_command('LEFT')
       simulation.process_command('MOVE')
       expect { simulation.process_command('REPORT').to output('3,3,NORTH').to_stdout }
+      
+      # move out of bounds:
+      simulation.process_command('MOVE')
+      simulation.process_command('MOVE')
+      simulation.process_command('MOVE')
+      simulation.process_command('LEFT')
+      simulation.process_command('MOVE')
+      simulation.process_command('MOVE')
+      simulation.process_command('MOVE')
+      expect { simulation.process_command('REPORT').to output('5,5,WEST').to_stdout }
     end
   end
 
