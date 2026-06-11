@@ -21,7 +21,7 @@ RSpec.describe Simulation do
       simulation.process_command('LEFT')
       simulation.process_command('MOVE')
       expect { simulation.process_command('REPORT').to output('3,3,NORTH').to_stdout }
-      
+
       # move out of bounds:
       simulation.process_command('MOVE')
       simulation.process_command('MOVE')
@@ -127,11 +127,20 @@ RSpec.describe Simulation do
           simulation.place(x: 0, y: 0, f: 'NORTH')
         end
 
-        let(:next_pose) { Pose.new(x: 0, y: 1, f: 'NORTH') }
+        let(:next_pose) { instance_double Pose }
 
         it 'does replace the current pose' do
           simulation.move
           expect(simulation.current_pose).to eq(next_pose)
+        end
+
+        context 'when not placeable' do
+          before { allow(grid).to receive(:placeable?).and_return(false) }
+
+          it 'does not change the current pose' do
+            simulation.move
+            expect(simulation.current_pose).to eq(Pose.new(x: 0, y:0, f:'NORTH'))
+          end
         end
       end
     end
@@ -150,10 +159,10 @@ RSpec.describe Simulation do
           simulation.place(x: 0, y: 0, f: 'NORTH')
         end
 
-        let(:rotated_pose) { Pose.new(x: 0, y: 1, f: 'NORTH') }
+        let(:rotated_pose) { instance_double Pose }
 
         it 'does replace the current pose' do
-          simulation.move
+          simulation.left
           expect(simulation.current_pose).to eq(rotated_pose)
         end
       end
@@ -173,10 +182,10 @@ RSpec.describe Simulation do
           simulation.place(x: 0, y: 0, f: 'NORTH')
         end
 
-        let(:rotated_pose) { Pose.new(x: 0, y: 1, f: 'NORTH') }
+        let(:rotated_pose) { instance_double Pose }
 
         it 'does replace the current pose' do
-          simulation.move
+          simulation.right
           expect(simulation.current_pose).to eq(rotated_pose)
         end
       end

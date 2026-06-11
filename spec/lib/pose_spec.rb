@@ -136,7 +136,7 @@ RSpec.describe Pose do
       it { is_expected.to be false }
     end
 
-    context 'when y does not match' do
+    context 'when f does not match' do
       let(:other_pose) { Pose.new(x: 0, y: 0, f: 'SOUTH') }
 
       it { is_expected.to be false }
