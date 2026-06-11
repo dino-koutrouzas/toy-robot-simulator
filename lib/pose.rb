@@ -1,4 +1,7 @@
 class Pose
+  # ordered cardinals with an axis and direction.
+  # e.g. when facing NORTH, we move along the
+  # :y axis in the positive (:+) direction
   CARDINAL_AXES = {
     'NORTH' => %i[y +],
     'EAST' => %i[x +],
@@ -35,6 +38,10 @@ class Pose
       [x, y].all? { |axis| axis.is_a?(Integer) && axis >= 0 }
   end
 
+  # creates a new pose, incrementing or decrementing one step on
+  # the relevant axis, based on its cardinal and variation.
+  # e.g. the new_axis_value when facing NORTH will be the value of
+  # y + 1, while the new_axis_value when facing SOUTH will be y - 1
   def next_pose
     axis, variation = CARDINAL_AXES[f]
     new_axis_value = send(axis).send(variation, 1)
@@ -56,6 +63,10 @@ class Pose
     { x:, y:, f: }
   end
 
+  # creates a new pose, determining the new cardinal
+  # by finding the index of the current cardinal and
+  # rotating the index value by step in the
+  # direction of the given variation
   def rotated(variation)
     current_index = CARDINALS.index(f)
     new_index = current_index.send(variation, 1) % CARDINALS.size
